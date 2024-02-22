@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
+use session;
 use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\RegisterRequest;
 
@@ -28,7 +30,7 @@ class AuthController extends Controller
             [
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'confirm_password' => $request->confirm_password,
             ]);
         return redirect('/login');
@@ -42,15 +44,18 @@ class AuthController extends Controller
         }
         return view('login');
     }
-    public function Login(LoginRequest $request): RedirectResponse
+    public function Login(LoginRequest $request)
     {
         $credential = $request->only('email','password');
         if(Auth::attempt($credential))
         {
             $route = $this->redirectDash();
             return redirect($route);
+        }else
+        {
+
         }
-        return redirect();
+
     }
 
     public function userDash(): View
@@ -71,5 +76,11 @@ class AuthController extends Controller
             $redirect = '/user/dashboard';
         }
         return $redirect;
+    }
+    public function logout(LoginRequest $request)
+    {
+        $request->session()->flush();
+        Auth::logout();
+        return redirect('/');
     }
 }
