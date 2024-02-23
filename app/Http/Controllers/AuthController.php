@@ -14,12 +14,12 @@ use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-    public function LoadRegister(): View
+    public function LoadRegister(): View|RedirectResponse
     {
         if(Auth::user())
         {
             $route = $this->redirectDash();
-            return view($route);
+            return redirect($route);
         }
         return view('register');
     }
@@ -33,14 +33,14 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password),
                 'confirm_password' => $request->confirm_password,
             ]);
-        return redirect('/login');
+        return redirect('login');
     }
 
-    public function LoadLogin(): View
+    public function LoadLogin(): View|RedirectResponse
     {
         if(Auth::user()){
-            $route = $this->redirect();
-            return view($route);
+            $route = $this->redirectDash();
+            return redirect($route);
         }
         return view('login');
     }
@@ -66,18 +66,18 @@ class AuthController extends Controller
     public function redirectDash()
     {
         $redirect = '';
-        if(Auth::user() && Auth::user()->Role == 1)
+        if(Auth::user() && Auth::user()->role == 1)
         {
             $redirect = '/admin/dashboard';
 
         } // if more User Roles i created example user, Super Admin , employee
         else
         {
-            $redirect = '/user/dashboard';
+            $redirect = '/user/welcome';
         }
         return $redirect;
     }
-    public function logout(LoginRequest $request)
+    public function logout(Request $request)
     {
         $request->session()->flush();
         Auth::logout();

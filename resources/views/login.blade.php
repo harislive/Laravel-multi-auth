@@ -18,7 +18,7 @@
             <h1>Login</h1>
         </div>
         <div class="card-body">
-            <form action="{{ route('login') }}" method="post">
+            <form action="" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -39,7 +39,7 @@
                 <button type="submit" class="btn btn-primary">
                     Login
                 </button>
-                
+
 
             </form>
         </div>

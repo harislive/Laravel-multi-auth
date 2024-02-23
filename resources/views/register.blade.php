@@ -18,7 +18,7 @@
             <h1>Login</h1>
         </div>
         <div class="card-body">
-            <form action="{{ route('register') }}" method="post">
+            <form action="{{ route('register') }}" method="POST">
                 @csrf
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
